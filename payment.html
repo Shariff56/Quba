@@ -249,49 +249,66 @@
             </div>
         </div>
     </div>
+    <!-- Add this to your existing HTML -->
+// Update the script section in your payment.html
+<script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
 
-   
-   
+    mobileMenuBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
 
-    <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // Payment function
-        async function startPayment() {
-            const name = document.getElementById('name').value;
-            const amount = document.getElementById('amount').value;
-            
-            if (!name || !amount) {
-                alert('Please enter both name and amount');
-                return;
-            }
-
-            // Generate unique transaction ID
-            const transactionId = 'TXN' + Date.now();
-            
-            // Save data temporarily
-            sessionStorage.setItem('paymentData', JSON.stringify({
-                name: name,
-                amount: amount,
-                transactionId: transactionId
-            }));
-
-            // Redirect to payment processor
-            window.location.href = `/process-payment?name=${encodeURIComponent(name)}&amount=${amount}&transactionId=${transactionId}`;
+    // Payment function
+    async function startPayment() {
+        const name = document.getElementById('name').value.trim();
+        const amount = document.getElementById('amount').value;
+        
+        if (!name || !amount) {
+            alert('Please enter both name and amount');
+            return;
         }
-    </script>
+
+        const amountNum = parseFloat(amount);
+        if (isNaN(amountNum)) {
+            alert('Please enter a valid amount');
+            return;
+        }
+
+        try {
+            const response = await fetch('/record-donation', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    name: name,
+                    amount: amountNum 
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Open UPI payment directly
+                window.location.href = result.upiLink;
+                
+                // Optional: Show success message
+                setTimeout(() => {
+                    alert('Payment initiated! Please complete the payment in your UPI app.');
+                }, 1000);
+            } else {
+                alert('Error: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Payment error:', error);
+            alert('Failed to process payment. Please try again.');
+        }
+    }
+
+    // Update button click handler
+    document.querySelector('button').onclick = startPayment;
+</script>
 </body>
 </html>
