@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Chatbot</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Navigation Bar */
+        nav {
+            background-color: #146712;
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            border-bottom: 2px solid white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Chatbot Container */
+        .chatbot-container {
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        .chatbot-header {
+            background-color: #146712;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .chatbot-header i {
+            margin-right: 10px;
+        }
+
+        .chatbot-messages {
+            height: 400px;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #fff;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .bot-message {
+            background-color: #f1f1f1;
+            color: #333;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background-color: #146712;
+            color: white;
+            border-bottom-right-radius: 5px;
+            margin-left: auto;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background-color: #146712;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chatbot-input button:hover {
+            background-color: #11570f;
+        }
+
+        .suggested-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+            border-top: 1px solid #ddd;
+        }
+
+        .suggested-question {
+            background-color: #e9e9e9;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .suggested-question:hover {
+            background-color: #146712;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: #146712;
+                flex-direction: column;
+                padding: 20px;
+                align-items: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .chatbot-container {
+                margin: 20px 10px;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chatbot-messages {
+                height: 350px;
+                padding: 15px;
+            }
+
+            .suggested-questions {
+                padding: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo"></a>
+            <button class="mobile-menu-btn">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html#updates">Updates</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li><a href="Madaresa.html">Madarasa</a></li>
+                <li><a href="charbot.html" class="active">Chat-bot</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <i class="fas fa-robot"></i>
+            <span>Islamic Knowledge Assistant</span>
+        </div>
+        
+        <div class="chatbot-messages" id="chat-messages">
+            <div class="message bot-message">
+                Assalamu Alaikum! I'm your Islamic knowledge assistant. How can I help you today?
+            </div>
+        </div>
+        
+        <div class="suggested-questions">
+            <div class="suggested-question" onclick="askQuestion(this)">What are the Five Pillars of Islam?</div>
+            <div class="suggested-question" onclick="askQuestion(this)">Tell me about Prophet Muhammad (PBUH)</div>
+            <div class="suggested-question" onclick="askQuestion(this)">How to perform Wudu?</div>
+            <div class="suggested-question" onclick="askQuestion(this)">What does Quran say about patience?</div>
+        </div>
+        
+        <div class="chatbot-input">
+            <input type="text" id="user-input" placeholder="Ask an Islamic question..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            &copy; 2023 Islamic Community Portal. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Chatbot functionality
+        const islamicKnowledge = {
+            "five pillars": "The Five Pillars of Islam are: 1. Shahada (Faith), 2. Salah (Prayer), 3. Zakat (Charity), 4. Sawm (Fasting in Ramadan), 5. Hajj (Pilgrimage to Makkah). [Sahih Bukhari]",
+            "prophet muhammad": "Prophet Muhammad (PBUH) is the final messenger of Allah, born in Makkah in 570 CE. He received revelation at age 40 and spent 23 years spreading Islam. The Quran says: 'We have sent you as a mercy to the worlds' (21:107).",
+            "wudu": "Wudu is performed by: 1. Intention, 2. Washing hands 3x, 3. Rinsing mouth 3x, 4. Sniffing water 3x, 5. Washing face 3x, 6. Washing arms to elbows 3x, 7. Wiping head, 8. Washing feet to ankles. [Sunan Abu Dawood]",
+            "patience": "Allah says: 'O you who believe! Seek help through patience and prayer. Indeed, Allah is with the patient.' (2:153) And: 'Allah loves those who are patient.' (3:146)",
+            "salah": "Salah is the second pillar of Islam. Muslims pray 5 times daily facing the Kaaba in Makkah. The Prophet (PBUH) said: 'Between faith and disbelief is the abandonment of prayer.' [Sahih Muslim]",
+            "ramadan": "Ramadan is the 9th month where Muslims fast from dawn to sunset. The Quran says: 'O you who believe! Fasting is prescribed for you as it was prescribed for those before you, that you may attain piety.' (2:183)",
+            "zakat": "Zakat is 2.5% of savings given annually to the poor. Allah says: 'Take charity from their wealth to purify them.' (9:103) It purifies wealth and helps those in need.",
+            "hajj": "Hajj is pilgrimage to Makkah required once in lifetime for those able. The Prophet (PBUH) said: 'Whoever performs Hajj properly will return as sinless as a newborn.' [Sahih Bukhari]",
+            "sunnah": "Sunnah refers to the teachings and practices of Prophet Muhammad (PBUH). Allah says: 'Whatever the Messenger gives you, take it, and whatever he forbids you, refrain from it.' (59:7)",
+            "quran": "The Quran is Allah's final revelation, preserved unchanged for 1400+ years. Allah says: 'We have sent down the Reminder (Quran), and We will preserve it.' (15:9) It contains guidance for all humanity."
+        };
+
+        const defaultResponses = [
+            "I'm sorry, I can only answer questions about Islamic topics. Could you ask something related to Islam?",
+            "That question is outside my knowledge of Islam. Perhaps ask about Quran, Hadith, or Islamic practices?",
+            "As an Islamic assistant, I'm programmed to discuss only matters related to Islam. How can I help you with Islamic knowledge?"
+        ];
+
+        function addMessage(message, isUser) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getIslamicResponse(question) {
+            question = question.toLowerCase();
+            
+            // Check for specific keywords
+            for (const keyword in islamicKnowledge) {
+                if (question.includes(keyword)) {
+                    return islamicKnowledge[keyword];
+                }
+            }
+            
+            // Check for general Islamic terms
+            const islamicTerms = ['islam', 'muslim', 'quran', 'allah', 'prayer', 'fasting', 'prophet', 'muhammad', 'hadith', 'sunnah'];
+            if (islamicTerms.some(term => question.includes(term))) {
+                return "Could you please be more specific about what you'd like to know regarding " + 
+                       islamicTerms.find(term => question.includes(term)) + "?";
+            }
+            
+            // Default response for non-Islamic questions
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const question = userInput.value.trim();
+            
+            if (question) {
+                addMessage(question, true);
+                userInput.value = '';
+                
+                // Simulate typing delay
+                setTimeout(() => {
+                    const response = getIslamicResponse(question);
+                    addMessage(response, false);
+                }, 800);
+            }
+        }
+
+        function askQuestion(element) {
+            const question = element.textContent;
+            document.getElementById('user-input').value = question;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Initial greeting
+        setTimeout(() => {
+            addMessage("You can ask me about Quran, Hadith, Islamic practices, history, or any other Islamic topic.", false);
+        }, 1500);
+    </script>
+</body>
+</html>

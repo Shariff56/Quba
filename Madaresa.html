@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madarasa - Community Portal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Navigation Bar Styles (same as other pages) */
+        nav {
+            background-color: #146712;
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            border-bottom: 2px solid white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content Styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .madarasa-hero {
+            background: linear-gradient(rgba(0,0,0,0.6), url('https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'));
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            margin-bottom: 40px;
+        }
+
+        .madarasa-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .madarasa-hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            margin: 40px 0;
+            color: #146712;
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: #146712;
+            margin: 15px auto;
+        }
+
+        /* About Section */
+        .about-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .about-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Programs Section */
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .program-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .program-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .program-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .program-content {
+            padding: 20px;
+        }
+
+        .program-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #146712;
+        }
+
+        /* Achievements Section */
+        .achievements {
+            background-color: #f9f9f9;
+            padding: 60px 0;
+            margin-bottom: 60px;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .achievement-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            color: #146712;
+            margin-bottom: 15px;
+        }
+
+        .achievement-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #146712;
+            margin-bottom: 10px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            margin-bottom: 60px;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: #146712;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background-color: #146712;
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 60px;
+            border-radius: 8px;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #146712;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            color: #146712;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: #146712;
+                flex-direction: column;
+                padding: 20px;
+                align-items: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .madarasa-hero {
+                padding: 80px 20px;
+            }
+
+            .madarasa-hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .madarasa-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Community Portal</a>
+            <button class="mobile-menu-btn">☰</button>
+            <ul class="nav-links">
+                <li><a href="index.html#updates">Updates</a></li>
+                <li><a href="donate.html">Donate</a></li>
+                <li><a href="Madaresa.html" class="active">Madarasa</a></li>
+                <li><a href="chatbot.html">Chat-bot</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="madarasa-hero">
+        <div class="container">
+            <h1>Al-Huda Madarasa</h1>
+            <p>Nurturing young minds with Islamic education and moral values since 2005</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="container">
+        <h2 class="section-title">About Our Madarasa</h2>
+        <div class="about-section">
+            <div class="about-content">
+                <p>Welcome to Al-Huda Madarasa, a premier Islamic educational institution dedicated to providing quality Quranic and Islamic studies to children and youth in our community. Established in 2005, we have been at the forefront of Islamic education, combining traditional teaching methods with modern educational techniques.</p>
+                <p>Our mission is to develop well-rounded Muslims who are grounded in their faith, strong in character, and prepared to contribute positively to society. We offer a comprehensive curriculum that includes Quran memorization, Arabic language, Islamic studies, and character development.</p>
+                <p>Our qualified teachers are passionate about Islamic education and committed to nurturing each student's spiritual and intellectual growth in a caring, supportive environment.</p>
+            </div>
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Madarasa classroom">
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Section -->
+    <section class="container">
+        <h2 class="section-title">Our Programs</h2>
+        <div class="programs-grid">
+            <div class="program-card">
+                <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                <div class="program-content">
+                    <h3 class="program-title">Quran Memorization (Hifz)</h3>
+                    <p>Our comprehensive Hifz program helps students memorize the Holy Quran with proper Tajweed. We offer both full-time and part-time options with individualized attention.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                <div class="program-content">
+                    <h3 class="program-title">Arabic Language</h3>
+                    <p>Learn to read, write and speak Arabic with our structured program. We teach Modern Standard Arabic as well as Quranic Arabic to understand the Holy Quran.</p>
+                </div>
+            </div>
+            <div class="program-card">
+                <div class="program-image" style="background-image: url('https://images.unsplash.com/photo-1588072432904-843af37f03ed?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                <div class="program-content">
+                    <h3 class="program-title">Weekend Islamic School</h3>
+                    <p>Our weekend program covers Aqeedah, Fiqh, Seerah, Hadith and Islamic manners. Perfect for school-going children to complement their regular education.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="achievements">
+        <div class="container">
+            <h2 class="section-title">Our Achievements</h2>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="achievement-number">42</div>
+                    <p>Hafiz/Hafiza Graduates</p>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-number">15</div>
+                    <p>Quran Competition Winners</p>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="achievement-number">200+</div>
+                    <p>Current Students</p>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="achievement-number">18</div>
+                    <p>Years of Service</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="container testimonials">
+        <h2 class="section-title">What Parents Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"My daughter completed her Hifz at Al-Huda Madarasa and I couldn't be prouder. The teachers are dedicated and the environment is perfect for Islamic learning."</p>
+                <p class="testimonial-author">- Brother Ahmed, Parent</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"The Arabic program transformed my son's ability to understand Quran. He now reads with understanding and confidence. JazakAllah khair!"</p>
+                <p class="testimonial-author">- Sister Fatima, Parent</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"As a convert, I appreciate how the Madarasa welcomes all students. My children are learning authentic Islam in a loving environment."</p>
+                <p class="testimonial-author">- Sister Aisha, Parent</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="container">
+        <div class="cta-section">
+            <h2>Ready to Enroll Your Child?</h2>
+            <p>Join our growing community of students learning authentic Islamic knowledge</p>
+            <a href="#contact" class="cta-button">Register Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Al-Huda Madarasa</h3>
+                    <p>Providing quality Islamic education since 2005. Our mission is to nurture the next generation of Muslims grounded in faith and knowledge.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html#updates">Updates</a></li>
+                        <li><a href="donate.html">Donate</a></li>
+                        <li><a href="#">Madarasa</a></li>
+                        <li><a href="index.html#chat-bot">Chat-bot</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Islamic Way, City</li>
+                        <li><i class="fas fa-phone"></i> (123) 456-7890</li>
+                        <li><i class="fas fa-envelope"></i> info@alhudamadarasa.org</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Al-Huda Madarasa. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
